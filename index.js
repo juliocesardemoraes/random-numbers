@@ -56,6 +56,8 @@ const createElementInDom = (i) => {
 
   const colorText = "#fff";
 
+  progressTag.style.boxShadow = `0 10px 15px -10px rgb(${colorBack.r}, ${colorBack.g}, ${colorBack.b})`;
+
   progressTag.style.background = `rgb(${colorBack.r}, ${colorBack.g}, ${colorBack.b})`;
   progressTag.style.color = colorText;
 
