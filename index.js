@@ -1,6 +1,43 @@
 const sortDiv = document.getElementById("sort-list");
 let arrayOfPossibilites = [];
+let colors = [];
 
+function HSVtoRGB(h, s, v) {
+  var r, g, b, i, f, p, q, t;
+  if (arguments.length === 1) {
+    (s = h.s), (v = h.v), (h = h.h);
+  }
+  i = Math.floor(h * 6);
+  f = h * 6 - i;
+  p = v * (1 - s);
+  q = v * (1 - f * s);
+  t = v * (1 - (1 - f) * s);
+  switch (i % 6) {
+    case 0:
+      (r = v), (g = t), (b = p);
+      break;
+    case 1:
+      (r = q), (g = v), (b = p);
+      break;
+    case 2:
+      (r = p), (g = v), (b = t);
+      break;
+    case 3:
+      (r = p), (g = q), (b = v);
+      break;
+    case 4:
+      (r = t), (g = p), (b = v);
+      break;
+    case 5:
+      (r = v), (g = p), (b = q);
+      break;
+  }
+  return {
+    r: Math.round(r * 255),
+    g: Math.round(g * 255),
+    b: Math.round(b * 255),
+  };
+}
 const createElementInDom = (i) => {
   const elTag = document.createElement("div");
   // elTag.id = i;
@@ -12,8 +49,19 @@ const createElementInDom = (i) => {
   //   progressTag.style.height = "30px";
   progressTag.classList.add("progress-value");
 
+  const randHue = Math.random() + 0.618033988749895;
+
+  const colorBack = HSVtoRGB(randHue, 0.5, 0.95);
+  console.log(colorBack);
+
+  const colorText = "#fff";
+
+  progressTag.style.background = `rgb(${colorBack.r}, ${colorBack.g}, ${colorBack.b})`;
+  progressTag.style.color = colorText;
+
   const progressTagText = document.createElement("span");
   progressTagText.textContent = i;
+  progressTagText.id = `${i}-text`;
 
   progressTag.append(progressTagText);
   elTag.append(progressTag);
@@ -42,6 +90,7 @@ function delay(i) {
   return new Promise((resolve) => {
     setTimeout(() => {
       const documentGetListItem = document.getElementById(`${i + 1}`);
+      const documentGetListItemText = document.getElementById(`${i + 1}-text`);
 
       arrayOfPossibilites[i][`${i + 1}`] += 20;
 
@@ -49,8 +98,9 @@ function delay(i) {
 
       if (documentGetListItem) {
         documentGetListItem.style.width = `${value}px`;
-        resolve();
+        documentGetListItemText.textContent = i + 1 + " - " + value;
       }
+      resolve();
     }, 1);
   });
 }
